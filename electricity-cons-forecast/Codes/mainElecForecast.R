@@ -1,6 +1,5 @@
-rm(list = ls())
-#setwd('C:/Users/jairp/Dropbox/_Papers_Books/01_Artigos_em_andamento/Time series/')
-getwd()
+rm(list = ls()) #remove all data
+
 # Importing functions
 source('Codes/dataPreprocessing.R')
 source('Codes/optimalArimaETS.R')
@@ -12,10 +11,10 @@ library(forecast)
 library(neuralnet)
 library(GenSA)
 
-# Importing data
-data = read.csv('Data/CEL_NE.csv', sep = ";")
+# Importar dados
+data = read.csv('Data/CE_NE.csv', sep = ";"); head(data)
 
-# Data Preprocessing #####
+# Phase 01 - Data Preprocessing #####
 # Splitting data into training and test sets
 split.data = getSplitData(data$target, training_set_size = 0.8)
 
@@ -24,21 +23,16 @@ normalized.data = getNormalizedData(split.data, lim_inf = 0.1, lim_sup = 0.9)
 
 # Creating model #####
 # Get optimal ARIMA and ANN models, respectively
-arima_model = auto.arima(normalized.data$training_set, ic = 'bic', nmodels = 5000)
-ann_model = getOptimalANN(normalized.data$training_set)
+arima_model = getOptimalARIMA(normalized.data$training_set)
 ets_model = getOptimalETS(normalized.data$training_set)
+ann_model = getOptimalANN(normalized.data$training_set)
 
-# One-step ahead approach #####
+# One-step ahead approach#####
 # ARIMA
-onestep_arima = fitted(Arima(normalized.data$test_set, model = arima_model))
-
-# ANN
-#complete_data = c(normalized.data$training_set, normalized.data$test_set)  
-onestep_ann = getAnnForecasts(ann_model, normalized.data$test_set)
-#onestep_ann = onestep_ann[(length(onestep_ann)-length(normalized.data$test_set)+1):length(onestep_ann)]
-
-# ETS
+onestep_arima = getARIMAForecasts(normalized.data$test_set, arima_model)
 onestep_ets = getETSForecasts(normalized.data$test_set, model = ets_model)
+onestep_ann = getAnnForecasts(ann_model, normalized.data$test_set)
+
 
 # ANN Parameters
 ann_model$nnParameters
