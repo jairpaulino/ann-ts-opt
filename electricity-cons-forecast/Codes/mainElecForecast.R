@@ -3,8 +3,8 @@ rm(list = ls())
 getwd()
 # Importing functions
 source('Codes/dataPreprocessing.R')
-source('Codes/optimalARIMA.R')
-source('Codes/optimalANN_IC.R')
+source('Codes/optimalArimaETS.R')
+source('Codes/optimalANN.R')
 source('Codes/performanceMetrics.R')
 
 # Libraries
@@ -93,4 +93,4 @@ lines(onestep_arima[(plot_size_start+1):plot_size_end], col = 2 , lwd = 2)
 lines(onestep_ets[(plot_size_start+1):plot_size_end], col = 3 , lwd = 2)
 lines(onestep_ann, col = 4 , lwd = 2)
 
-
+matriz = getAnnMatrix(1:50, ar = 5, ss = 10, sar = 3)
