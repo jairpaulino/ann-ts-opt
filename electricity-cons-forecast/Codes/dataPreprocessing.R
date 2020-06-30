@@ -4,8 +4,9 @@ getSplitData = function(data, training_set_size=0.8){
   split_data = list()
   split_data$training_set = training_set
   split_data$test_set = test_set
-  return( split_data)
+  return(split_data)
 }
+
 normalize = function(array, x, y){
   #Normalize to [0, 1]
   m = min(array) 
@@ -17,6 +18,7 @@ normalize = function(array, x, y){
   normalized = (norm1*range2) + x
   return(normalized)
 }
+
 denormalize = function(array, min, max, x, y){
   
   range2 = y - x
@@ -24,6 +26,7 @@ denormalize = function(array, min, max, x, y){
   return(round(norm1*(max-min)+min, 1))
   #   return(nv*(max-min)+min)
 }
+
 getNormalizedData =  function(split.data, lim_inf = 0.2, lim_sup = 0.8){
   
   training_set = normalize(split.data[[1]], lim_inf, lim_sup)
