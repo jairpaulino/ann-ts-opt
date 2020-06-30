@@ -1,6 +1,6 @@
 getOptimalARIMA = function(training_test){
   arima_model = auto.arima(training_test, ic = 'bic', nmodels = 5000)
-  return(model)
+  return(arima_model)
 }
 
 getARIMAForecasts = function(test_set, model){
@@ -22,5 +22,15 @@ getETSForecasts = function(test_set, model){
   return(onestep_ets)
 }
 
+getOptimalNNAR = function(training_test){
+  nnar_model = nnetar(training_test)
+  return(nnar_model)
+}
 
+getNNARForecasts = function(test_set, model){
+  onestep_nnar = fitted(nnetar(test_set, model = model))
+  plot(onestep_nnar, lwd = 2)
+  lines(test_set, col = 2, lwd = 2)
+  return(onestep_nnar)
+}
 
