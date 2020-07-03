@@ -8,7 +8,7 @@ source('Codes/performanceMetrics.R')
 
 # Libraries
 library(forecast) #ARIMA, ETS e NNETAR
-#library(neuralnet)
+library(neuralnet) #redes neurais
 #library(GenSA)
 #library(GA)
 
@@ -57,5 +57,39 @@ getMSE(normalized.data$test_set, onestep_nnar)
 getMAPE(normalized.data$test_set, onestep_nnar)
 getARV(normalized.data$test_set, onestep_nnar)
 
-# Optimization ####
-#matriz = getAnnMatrix(normalized.data$training_set, ar = 2, ss = 12, sar = 2)
+# Optimization (in process) ####
+# matriz = getAnnMatrix(normalized.data$training_set, ar = 2, ss = 12, sar = 2)
+# View(matriz)
+# 
+# matriz.2 = cbind(normalized.data$training_set[25:391], matriz)
+# names(matriz.2) = c('t_0','t_1','t_2','t_12','t_24')
+# head(matriz.2)
+# 
+# set.seed(123)
+# model_mlp = neuralnet(t_0 ~ t_1 + t_2 + t_12 + t_24 , 
+#                       data = matriz.2,
+#                       learningrate = 0.05,
+#                       algorithm = "rprop+",
+#                       hidden = c(20, 20),
+#                       rep = 10
+#                       )
+# plot(model_mlp)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
