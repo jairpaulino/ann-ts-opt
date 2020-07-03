@@ -352,3 +352,21 @@ computePerformanceMetrics02= function(all.series, from=1, to=n, phaseLabel = "Tr
             , row.names = TRUE)
   View(performanceMatrix, title = resultName)
 }
+
+getCalculatedMetrics = function(results.table) {
+  
+  #results.table = na.omit(results.table)
+  
+  metrics.table = as.data.frame(matrix(nrow = 3, ncol = 3))
+  colnames(metrics.table) = c('ARIMA', 'ETS', 'NNAR')
+  rownames(metrics.table) = c('MSE', 'MAPE', 'ARV')
+  
+  # Getting MSE
+  for (i in 1:3){
+    metrics.table[1, i] = getMSE(results.table[[1]], results.table[[(i+1)]])
+    metrics.table[2, i] = getMAPE(results.table[[1]], results.table[[(i+1)]])
+    metrics.table[3, i] = getARV(results.table[[1]], results.table[[(i+1)]])
+  }
+  
+  return(metrics.table)
+}
