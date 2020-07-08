@@ -73,15 +73,8 @@ matriz = getAnnMatrix(normalized.data$training_set, ar = 4, ss = 10, sar = 3)
 source('Codes/optimalANN.R')
 annParamenters = getOptGAParameters() 
 
-
-
-
-
-
-
-
-
-
+# A = getAnnMatrix(ar = 2, ss = 12, sar = 3, time_series = 1:50)
+# View(A)
 
 
 
