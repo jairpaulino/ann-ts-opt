@@ -10,7 +10,7 @@ source('Codes/performanceMetrics.R')
 library(forecast) #ARIMA, ETS e NNETAR
 library(neuralnet) #redes neurais
 #library(GenSA)
-#library(GA)
+library(GA)
 
 # Importar dados
 data = read.csv('Data/CE_NE.csv', sep = ";"); head(data, 5)
@@ -49,34 +49,29 @@ View(metrics.table)
 
 # graphics
 plot.ts(normalized.data$test_set, lwd = 2)
-lines(onestep_arima, col = 2 , lwd = 2)
-lines(onestep_ets, col = 3 , lwd = 2)
-lines(onestep_nnar, col = 4 , lwd = 2)
+lines(onestep_arima, col = 2, lwd = 2)
+lines(onestep_ets, col = 3, lwd = 2)
+lines(onestep_nnar, col = 4, lwd = 2)
 
-getMSE(normalized.data$test_set, onestep_nnar)
-getMAPE(normalized.data$test_set, onestep_nnar)
-getARV(normalized.data$test_set, onestep_nnar)
+# getMSE(normalized.data$test_set, onestep_nnar)
+# getMAPE(normalized.data$test_set, onestep_nnar)
+# getARV(normalized.data$test_set, onestep_nnar)
 
 # Optimization (in process) ####
-# matriz = getAnnMatrix(normalized.data$training_set, ar = 2, ss = 12, sar = 2)
-# View(matriz)
-# 
-# matriz.2 = cbind(normalized.data$training_set[25:391], matriz)
-# names(matriz.2) = c('t_0','t_1','t_2','t_12','t_24')
-# head(matriz.2)
-# 
+matriz = getAnnMatrix(normalized.data$training_set, ar = 4, ss = 10, sar = 3)
+#View(matriz)
+ 
 # set.seed(123)
-# model_mlp = neuralnet(t_0 ~ t_1 + t_2 + t_12 + t_24 , 
-#                       data = matriz.2,
+# model_mlp = neuralnet(t_0 ~ .,
+#                       data = matriz,
 #                       learningrate = 0.05,
 #                       algorithm = "rprop+",
-#                       hidden = c(20, 20),
-#                       rep = 10
-#                       )
+#                       hidden = c(10, 10),
+#                       rep = 10)
 # plot(model_mlp)
 
-
-
+source('Codes/optimalANN.R')
+annParamenters = getOptGAParameters() 
 
 
 
