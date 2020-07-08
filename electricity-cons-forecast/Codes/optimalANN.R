@@ -1,5 +1,5 @@
 # Criar matrix a partir da ST
-getAnnMatrix = function(ar, ss, sar, serie_temporal){
+getAnnMatrix = function(ar, ss, sar, time_series){
   
   #time_series = 1:30; ar = 4; ss = 12; sar = 2
   matriz.sliding.window.ar = as.data.frame(matrix(nrow = length(time_series), ncol = (ar+1)))
@@ -57,7 +57,7 @@ fitnessGA = function(ar, ss, sar, nh1, nh2, serie_temporal = normalized.data$tra
                         data = matriz,
                         learningrate = 0.05,
                         algorithm = "rprop+",
-                        hidden = c(nh1, nh2),
+                        hidden = c(nh1),#, nh2),
                         rep = 5)
   #plot(model_mlp)
   
@@ -69,7 +69,8 @@ fitnessGA = function(ar, ss, sar, nh1, nh2, serie_temporal = normalized.data$tra
   matriz.previsao$obs = model_mlp$data[[1]]
   matriz.previsao$forecast = model_mlp$net.result[[1]]
   matriz.previsao = na.omit(matriz.previsao)
-  return(getTheil(matriz.previsao$obs, matriz.previsao$forecast))  
+  minTheil = 1/(1-getTheil(matriz.previsao$obs, matriz.previsao$forecast))
+  return(minTheil)  
 }
 
 # Calcula os parametros - GA
@@ -80,17 +81,17 @@ getOptGAParameters = function(){
   lower = c(1, 12, 01, 01, 15)
   upper = c(05, 20, 05, 01, 15)
   GA <- ga(type = "real-valued", 
-           fitness =  function(x) -fitnessGA (x[1], x[2], x[3], x[4], x[5]),
+           fitness =  function(x) fitnessGA (x[1], x[2], x[3], x[4], x[5]),
            lower = lower, upper = upper, 
-           pcrossover = 0.9,
-           pmutation = 0.1,
-           popSize = 10,
+           pcrossover = 0.95,
+           pmutation = 0.2,
+           popSize = 20,
            maxiter = 1000,
            run = 30,
            seed = 22)
   
   plot(GA)
-  
+  GA[1]
   # C = summary(GA)$solution[1,][1]; n = round(summary(GA)$solution[1,][2]) 
   # w = round(summary(GA)$solution[1,][3]); pos_type = round(summary(GA)$solution[1,][4]) 
   # result = c(C, n, w, pos_type)
