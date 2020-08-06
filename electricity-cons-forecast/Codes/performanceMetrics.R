@@ -355,18 +355,40 @@ computePerformanceMetrics02= function(all.series, from=1, to=n, phaseLabel = "Tr
 
 getCalculatedMetrics = function(results.table) {
   
-  #results.table = na.omit(results.table)
+  #results.table = na.omit(resultsTest)
   
-  metrics.table = as.data.frame(matrix(nrow = 3, ncol = 3))
-  colnames(metrics.table) = c('ARIMA', 'ETS', 'NNAR')
+  metrics.table = as.data.frame(matrix(nrow = 3, ncol = 5))
+  colnames(metrics.table) = c('ARIMA', 'ETS', 'NNAR', 'SA', 'SM')
   rownames(metrics.table) = c('MSE', 'MAPE', 'ARV')
   
   # Getting MSE
-  for (i in 1:3){
+  for (i in 1:5){
     metrics.table[1, i] = getMSE(results.table[[1]], results.table[[(i+1)]])
     metrics.table[2, i] = getMAPE(results.table[[1]], results.table[[(i+1)]])
     metrics.table[3, i] = getARV(results.table[[1]], results.table[[(i+1)]])
+  
   }
   
   return(metrics.table)
 }
+
+getCalculatedMetricsTest = function(results.table) {
+  
+  #results.table = na.omit(resultsTest)
+  
+  metrics.table = as.data.frame(matrix(nrow = 4, ncol = 6))
+  colnames(metrics.table) = c('ARIMA', 'ETS', 'NNAR', 'SA', 'SM', 'DE')
+  rownames(metrics.table) = c('MSE', 'MAPE', 'ARV', 'Theil')
+  
+  # Getting MSE
+  for (i in 1:6){
+    metrics.table[1, i] = getMSE(results.table[[1]], results.table[[(i+1)]])
+    metrics.table[2, i] = getMAPE(results.table[[1]], results.table[[(i+1)]])
+    metrics.table[3, i] = getARV(results.table[[1]], results.table[[(i+1)]])
+    metrics.table[4, i] = getTheil(results.table[[1]], results.table[[(i+1)]])
+    
+  }
+  
+  return(metrics.table)
+}
+
