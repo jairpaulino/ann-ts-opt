@@ -85,15 +85,22 @@ getOptGAParameters = function(){
            lower = lower, upper = upper, 
            pcrossover = 0.95,
            pmutation = 0.2,
-           popSize = 20,
+           popSize = 10,
            maxiter = 1000,
-           run = 30,
+           parallel = T,
+           run = 10,
            seed = 22)
   
+  result = list()
+  GA
+  result$ar
+  ar = round(ar, 0); sar = round(sar, 0); ss = round(ss, 0)
+  nh1 = round(nh1, 0); nh2 = round(nh2, 0)
+  
+  
   plot(GA)
-  GA[1]
-  # C = summary(GA)$solution[1,][1]; n = round(summary(GA)$solution[1,][2]) 
-  # w = round(summary(GA)$solution[1,][3]); pos_type = round(summary(GA)$solution[1,][4]) 
+  C = summary(GA)$solution[1,][1]; n = round(summary(GA)$solution[1,][2]) 
+  w = round(summary(GA)$solution[1,][3]); pos_type = round(summary(GA)$solution[1,][4]) 
   # result = c(C, n, w, pos_type)
-  # return(result)
+  return(result)
 }
