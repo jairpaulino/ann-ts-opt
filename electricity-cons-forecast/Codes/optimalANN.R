@@ -1,5 +1,5 @@
 # Criar matrix a partir da ST
-getAnnMatrix = function(ar, ss, sar, time_series){
+getAnnMatrix = function(ar, ss = 12, sar = 1, time_series){
   
   #time_series = 1:30; ar = 4; ss = 12; sar = 2
   matriz.sliding.window.ar = as.data.frame(matrix(nrow = length(time_series), ncol = (ar+1)))
@@ -102,5 +102,38 @@ getOptGAParameters = function(){
   C = summary(GA)$solution[1,][1]; n = round(summary(GA)$solution[1,][2]) 
   w = round(summary(GA)$solution[1,][3]); pos_type = round(summary(GA)$solution[1,][4]) 
   # result = c(C, n, w, pos_type)
+  return(result)
+}
+
+
+getMLP = function(train, test){
+  #train = normalized.data$training_set; head(train)
+  #test = normalized.data$test_set; View(test)
+  MLPTrain_df =  getAnnMatrix(ar = 11, time_series = train)
+  MLPTest_df =  getAnnMatrix(ar = 11, time_series = test)
+  
+  #View(MLP_df)
+  
+  beginTrain = proc.time()
+  set.seed(123)
+  mlpModel = neuralnet(t_0 ~ .,
+                       data = MLPTrain_df,
+                       learningrate = 0.01,
+                       algorithm = "rprop+",
+                       act.fct = 'logistic',
+                       hidden = c(10, 10),
+                       rep = 5,
+                       )
+  procTimeTrain = proc.time() - beginTrain
+  
+  beginTest = proc.time()
+  onestepMLP = compute(mlpModel, MLPTest_df, rep = 5)
+  procTimeTest = proc.time() - beginTest
+  
+  result = list()
+  result$train = (mlpModel$net.result[[1]] + mlpModel$net.result[[2]] + mlpModel$net.result[[3]])/3
+  result$test = onestepMLP$net.result
+  result$proc_time_train = procTimeTrain
+  result$proc_time_test = procTimeTest
   return(result)
 }

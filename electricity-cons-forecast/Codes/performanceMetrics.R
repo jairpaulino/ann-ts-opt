@@ -376,12 +376,12 @@ getCalculatedMetricsTest = function(results.table) {
   
   #results.table = na.omit(resultsTest)
   
-  metrics.table = as.data.frame(matrix(nrow = 4, ncol = 6))
-  colnames(metrics.table) = c('ARIMA', 'ETS', 'NNAR', 'SA', 'SM', 'DE')
+  metrics.table = as.data.frame(matrix(nrow = 4, ncol = 7))
+  colnames(metrics.table) = c('ARIMA', 'ETS', 'NNAR', 'MLP' ,'SA', 'SM', 'DE')
   rownames(metrics.table) = c('MSE', 'MAPE', 'ARV', 'Theil')
   
   # Getting MSE
-  for (i in 1:6){
+  for (i in 1:7){
     metrics.table[1, i] = getMSE(results.table[[1]], results.table[[(i+1)]])
     metrics.table[2, i] = getMAPE(results.table[[1]], results.table[[(i+1)]])
     metrics.table[3, i] = getARV(results.table[[1]], results.table[[(i+1)]])
