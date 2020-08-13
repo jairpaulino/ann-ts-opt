@@ -17,7 +17,7 @@ library(h2o)
 library(pROC)
 
 # Importar dados
-names = 'NE'
+names = 'SE'
 
 data = read.csv(paste0('Data/CE_', names, '.csv'), sep = ";"); head(data, 5)
 
@@ -92,9 +92,11 @@ resultsTest = na.omit(resultsTest)
 resultsTest$SA = (resultsTest$ARIMA + resultsTest$ETS + resultsTest$NNAR + resultsTest$MLP)/4
 resultsTest$SM = getSM(resultsTest)
 DE_onestep = getDeepEnsemble(resultsTrain, resultsTest)
-resultsTest$DE = DE_onestep[1]
+resultsTest$DE = (DE_onestep[[1]])
+# View(resultsTest)
+write.csv(resultsTest, file = paste0('Results/onestep', names, '.txt'))
 
-head(resultsTest); length(resultsTest[[1]])
+#head(resultsTest); length(resultsTest[[1]])
 
 # Phase 04 - Performance analysis #####
 # Proc time
@@ -121,50 +123,54 @@ linha = c(1, 2, 3, 4, 5, 6, 7)
 simbolo = c(NA, 15, 16, 17, 18, 19, 20)
 legenda = c("Observed values", "ARIMA", "ETS", "NNAR", "MLP")
 
-# Individual
+a = 67; b = length(resultsTest$obs); b-a
 #jpeg(filename = paste("Results/", names,"_onestep_teste_IND.jpeg", sep=""), width = 7, height = 6, units = 'in', res = 300)
-plot.ts(resultsTest$obs, lwd = 2, xlab = "Index (test set)", 
-        ylab = names, ylim = c(min(resultsTest)*1, max(resultsTest)*1))
+plot.ts(resultsTest$obs[a:b], lwd = 2, xlab = "Index (test set)", 
+        ylab = names, ylim = c(0, 0.8))
 # ARIMA
-lines(resultsTest$ARIMA, lwd = 2, col = cor[2], lty = linha[2], pch = simbolo[2])
-points(resultsTest$ARIMA, col = cor[2], pch = simbolo[2])
+lines(resultsTest$ARIMA[a:b], lwd = 2, col = cor[2], lty = linha[2], pch = simbolo[2])
+points(resultsTest$ARIMA[a:b], col = cor[2], pch = simbolo[2])
 # ETS
-lines(resultsTest$ETS, lwd = 2, col = cor[3], lty = linha[3], pch = simbolo[3])
-points(resultsTest$ETS, col = cor[3], pch = simbolo[3])
+lines(resultsTest$ETS[a:b], lwd = 2, col = cor[3], lty = linha[3], pch = simbolo[3])
+points(resultsTest$ETS[a:b], col = cor[3], pch = simbolo[3])
 # NNAR
-lines(resultsTest$NNAR, lwd = 2, col = cor[4], lty = linha[4], pch = simbolo[4])
-points(resultsTest$NNAR, col = cor[4], pch = simbolo[4])
-# FTS-GA
-lines(resultsTest$MLP, lwd = 2, col = cor[5], lty = linha[5], pch = simbolo[5])
-points(resultsTest$MLP, col = cor[5], pch = simbolo[5])
-# FTS-SA
-#lines(results$FTS_SA, lwd = 2, col = cor[6], lty = linha[6], pch = simbolo[6])
-#points(results$FTS_SA, col = cor[6], pch = simbolo[6])
+lines(resultsTest$NNAR[a:b], lwd = 2, col = cor[4], lty = linha[4], pch = simbolo[4])
+points(resultsTest$NNAR[a:b], col = cor[4], pch = simbolo[4])
+# MLP
+lines(resultsTest$MLP[a:b], lwd = 2, col = cor[5], lty = linha[5], pch = simbolo[5])
+points(resultsTest$MLP[a:b], col = cor[5], pch = simbolo[5])
+
 # legenda
-legend("topleft", legenda, col = cor, horiz = F,
+legend("bottomleft", legenda, col = cor, horiz = F,
        cex = 0.9, lty = linha, lwd = 2, border = T,
        bty = "o", pch = simbolo, inset = 0.01,
        bg = "white", box.col = "white")
 dev.off()
 
 # Combined
-cor = c(1, "#32CD32", "#0000FF", "#1E90FF", 2, "#900C3F") 
+cor = c(1, "#32CD32", "#0000FF", 2, "#1E90FF", "#900C3F") 
 linha = c(1, 2, 3, 4, 5, 6, 7)
 simbolo = c(NA, 15, 16, 17, 18, 19, 20)
 legenda = c("Observed values", "SA", "SM", "DE")
 
 # Individual
+a = 67
+b = length(resultsTest$obs)
+b-a
 #jpeg(filename = paste("Results/", names,"_onestep_teste_COM.jpeg", sep=""), width = 7, height = 6, units = 'in', res = 300)
-plot.ts(resultsTest$obs, lwd = 2, xlab = "Index (test set)", 
-        ylab = names, ylim = c(min(resultsTest)*1, max(resultsTest)*1))
+plot.ts(resultsTest$obs[a:b], lwd = 2, xlab = "Index (test set)", 
+        ylab = names, ylim = c(0, 0.8))
 # SA
-lines(resultsTest$SA, lwd = 2, col = cor[2], lty = linha[2], pch = simbolo[2])
-points(resultsTest$SA, col = cor[2], pch = simbolo[2])
+lines(resultsTest$SA[a:b], lwd = 2, col = cor[2], lty = linha[2], pch = simbolo[2])
+points(resultsTest$SA[a:b], col = cor[2], pch = simbolo[2])
 # SM
-lines(resultsTest$SM, lwd = 2, col = cor[3], lty = linha[3], pch = simbolo[3])
-points(resultsTest$SM, col = cor[3], pch = simbolo[3])
+lines(resultsTest$SM[a:b], lwd = 2, col = cor[3], lty = linha[3], pch = simbolo[3])
+points(resultsTest$SM[a:b], col = cor[3], pch = simbolo[3])
 # DE
-legend("topleft", legenda, col = cor, horiz = F,
+lines(resultsTest$DE[a:b], lwd = 2, col = cor[4], lty = linha[4], pch = simbolo[3])
+points(resultsTest$DE[a:b], col = cor[4], pch = simbolo[4])
+
+legend("bottomleft", legenda, col = cor, horiz = F,
        cex = 0.9, lty = linha, lwd = 2, border = T,
        bty = "o", pch = simbolo, inset = 0.01,
        bg = "white", box.col = "white")
