@@ -5,8 +5,8 @@ getOptimalARIMA = function(training_test){
 
 getARIMAForecasts = function(test_set, model){
   onestep_arima = fitted(Arima(test_set, model = model))
-  plot(onestep_arima, lwd = 2)
-  lines(test_set, col = 2, lwd = 2)
+  #plot(onestep_arima, lwd = 2)
+  #lines(test_set, col = 2, lwd = 2)
   return(onestep_arima)
 }
 
@@ -16,9 +16,9 @@ getOptimalETS = function(training_test){
 }
 
 getETSForecasts = function(test_set, model){
-  onestep_ets = fitted(ets(test_set, model = model))
-  plot(onestep_ets, lwd = 2)
-  lines(test_set, col = 2, lwd = 2)
+  onestep_ets = fitted(ets(test_set, model = model, use.initial.values = TRUE))
+  #plot(onestep_ets, lwd = 2)
+  #lines(test_set, col = 2, lwd = 2)
   return(onestep_ets)
 }
 
@@ -29,8 +29,8 @@ getOptimalNNAR = function(training_test){
 
 getNNARForecasts = function(test_set, model){
   onestep_nnar = fitted(nnetar(test_set, model = model))
-  plot(onestep_nnar, lwd = 2)
-  lines(test_set, col = 2, lwd = 2)
+  #plot(onestep_nnar, lwd = 2)
+  #lines(test_set, col = 2, lwd = 2)
   return(onestep_nnar)
 }
 

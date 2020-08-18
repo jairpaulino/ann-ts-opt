@@ -4,7 +4,8 @@ getSM = function(matrix){
   #matrix = resultsTrain
   SM = NULL
   for (i in 1:length(matrix[[1]])) { #i=1
-    SM[i] = median(matrix[i,2], matrix[i,3], matrix[i,4], matrix[i,5])
+    SM[i] = median(c(matrix[i,2], matrix[i,3], matrix[i,4]), na.rm = TRUE)
+    #summary(matrix[i,2], matrix[i,3], matrix[i,4])
   }
   
   return(SM)
@@ -33,7 +34,7 @@ getDeepEnsemble = function(resultsTrain, resultsTest){
                            activation = 'Tanh', 
                            #nfolds = 5,
                            replicate_training_data = TRUE,
-                           hidden = c(100, 100, 100),
+                           hidden = c(80, 80),
                            epochs = 100, 
                            seed = 123,
                            #l1 = 1.0E-5, #ver depois
@@ -64,6 +65,16 @@ getDeepEnsemble = function(resultsTrain, resultsTest){
 grid = function(){
   
   # Hyper-parameter Tuning with Grid Search
+  
+  set.seed(123)
+  split = sample.split(resultsTrain[[1]], SplitRatio = 0.75)
+  train_set = subset(resultsTrain, split == TRUE); head(train_set)
+  valid_set = subset(resultsTrain, split == FALSE); head(valid_set)
+  #length(train_valid_set[[1]]) + length(test_set[[1]])
+  
+  test_set = resultsTest
+  #length(train_set[[1]]) + length(valid_set[[1]]) + length(test_set[[1]])
+  
   
   hyper_params <- list(
     hidden = list(c(60, 60), c(80, 80), c(100, 100), c(100, 100, 100)),
