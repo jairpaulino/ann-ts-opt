@@ -94,7 +94,7 @@ resultsTest$SM = getSM(resultsTest)
 DE_onestep = getDeepEnsemble(resultsTrain, resultsTest)
 resultsTest$DE = DE_onestep[[1]]
 # View(resultsTest)
-write.csv(resultsTest, file = paste0('Results/onestep', names, '.txt'))
+write.csv(resultsTest, file = paste0('Results/', names, '_onestep.txt'))
 
 #head(resultsTest); length(resultsTest[[1]])
 
@@ -111,17 +111,17 @@ procTime_df$SM = procTimeSM[3]
 procTime_df$DE = as.numeric(DE_onestep[2])
 #View(procTime_df)
 
-write.csv(procTime_df, file = paste0('Results/', names, '.txt'))
+write.csv(procTime_df, file = paste0('Results/', names, '_procTime.txt'))
 
 #Metrics
 metricsTest = getCalculatedMetricsTest(resultsTest) #View(metricsTest)
-write.csv(metricsTest, file = paste0('Results/metrics_', names, '.txt'))
+write.csv(metricsTest, file = paste0('Results/', names, '_metrics.txt'))
 
 # graphics
 cor = c(1, "#32CD32", "#0000FF", 2, "#1E90FF", "#900C3F") 
 linha = c(1, 2, 3, 4, 5, 6, 7)
 simbolo = c(NA, 15, 16, 17, 18, 19, 20)
-legenda = c("TS", "ARIMA ", "ETS        ", "MLP")
+legenda = c("TS", "BJ", "ETS        ", "MLP")
 
 a = 67; b = length(resultsTest$obs); b-a
 jpeg(filename = paste("Results/", names,"_onestep_teste_IND.jpeg", sep=""), width = 7, height = 6, units = 'in', res = 300)
@@ -193,9 +193,6 @@ dev.off()
 
 # A = getAnnMatrix(ar = 2, ss = 12, sar = 3, time_series = 1:50)
 # View(A)
-
-
-
 
 
 
